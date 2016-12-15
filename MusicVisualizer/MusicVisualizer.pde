@@ -1,19 +1,24 @@
 import ddf.minim.*;
 import ddf.minim.analysis.*;
+import peasy.*;
 //import processing.sound.*;
 
+PeasyCam cam;
 AudioInput in;
 Minim minim;
 FFT fft;
-int bands = 512;
+int bands = 1024;
 int r, g, b;
-float s;
+float s, offset;
 //float[] spectrum = new float [bands];
 
 void setup(){
  size(1000,1000, P3D);
  background(0);
  
+  cam = new PeasyCam(this, 100);
+  cam.setMinimumDistance(50);
+  cam.setMaximumDistance(150);
   
  minim = new Minim(this);
  //minim.debugOn();
@@ -32,10 +37,11 @@ void draw()
   spotLight(51, 102, 255, 50, 50, 400, 0, 0, -1, PI/16, 2); 
     translate(width/10,height/2,-1500);
   rotateX(PI/10+s);
-  rotateY(PI/8);
+  rotateY(PI/8+s);
   rotateZ(PI/5+s);
    
-   s+=0.01; //rotation speed
+   s+=map(noise(offset),0,1,0.005,0.01); //rotation speed
+   offset +=0.1;
    
   // draw the waveforms
   background(0);
